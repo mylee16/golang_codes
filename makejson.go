@@ -1,33 +1,44 @@
+/*
+Write a program which prompts the user to first enter a name, and then enter
+an address. Your program should create a map and add the name and address to
+the map using the keys “name” and “address”, respectively. Your program should
+use Marshal() to create a JSON object from the map, and then your program should
+print the JSON object.
+*/
+
 package main
 
 import (
+	"encoding/json"
 	"fmt"
-	"sort"
-	"strconv"
 )
 
 func main() {
 
-	sli := make([]int, 0, 3)
-	i := 1
-	var num string
+	var name string
+	fmt.Printf("Please enter your name: ")
+	fmt.Scan(&name)
 
-	for i == 1 {
-		fmt.Printf("Please an integer: ")
-		fmt.Scan(&num)
+	var address string
+	fmt.Printf("Please enter your address: ")
+	fmt.Scan(&address)
 
-		switch {
-		case num == "X" || num == "x":
-			i = 0
-			{
-				break
-			}
-		default:
-			numInt, _ := strconv.Atoi(num)
-			sli = append(sli, numInt)
-			sort.Ints(sli)
-			fmt.Println(sli)
-		}
+	type Person struct {
+		Name    string
+		Address string
 	}
+
+	p1 := Person{Name: name,
+		Address: address}
+
+	// convert to byte array
+	barr, err := json.Marshal(p1)
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println(string(barr))
 
 }
