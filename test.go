@@ -1,13 +1,16 @@
-package main
+package main //entrypoint
 
 import (
 	"fmt"
 )
 
+// 2 return value
+func foo2(x int) (int, int) { //two return value both int
+	return x, x + 1
+}
+
 func main() {
-	s := make([]int, 0, 3)
-	fmt.Println(s)
-	s = append(s, 100)
-	fmt.Println(len(s), cap(s))
-	fmt.Println(s)
+	a, b := foo2(3)
+	fmt.Print(a)
+	fmt.Print(b)
 }
