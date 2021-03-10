@@ -1,16 +1,18 @@
-package main //entrypoint
+package main
 
-import (
-	"fmt"
-)
+import "fmt"
 
-// 2 return value
-func foo2(x int) (int, int) { //two return value both int
-	return x, x + 1
+type Speaker interface{ Speak() }
+
+type Dog struct{ name string }
+
+func (d Dog) Speak() {
+	fmt.Println(d.name)
 }
 
 func main() {
-	a, b := foo2(3)
-	fmt.Print(a)
-	fmt.Print(b)
+	var s1 Speaker
+	var d1 = Dog{"Brian"}
+	s1 = d1
+	s1.Speak()
 }
