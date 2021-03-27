@@ -41,15 +41,15 @@ type Animal struct {
 	spoken     string
 }
 
-func (p Animal) Eat() string {
+func (p *Animal) Eat() string {
 	return p.food
 }
 
-func (p Animal) Move() string {
+func (p *Animal) Move() string {
 	return p.locomotion
 }
 
-func (p Animal) Speak() string {
+func (p *Animal) Speak() string {
 	return p.spoken
 }
 
@@ -69,31 +69,23 @@ func main() {
 			line := scanner.Text()
 			s := strings.Split(line, " ")
 
-			if s[0] == "cow" {
-				if s[1] == "eat" {
-					fmt.Println(cow.Eat())
-				} else if s[1] == "move" {
-					fmt.Println(cow.Move())
-				} else if s[1] == "speak" {
-					fmt.Println(cow.Speak())
-				}
+			var animal *Animal
+			switch s[0] {
+			case "cow":
+				animal = &cow
+			case "bird":
+				animal = &bird
+			case "snake":
+				animal = &snake
+			}
 
-			} else if s[0] == "bird" {
-				if s[1] == "eat" {
-					fmt.Println(bird.Eat())
-				} else if s[1] == "move" {
-					fmt.Println(bird.Move())
-				} else if s[1] == "speak" {
-					fmt.Println(bird.Speak())
-				}
-			} else if s[0] == "snake" {
-				if s[1] == "eat" {
-					fmt.Println(snake.Eat())
-				} else if s[1] == "move" {
-					fmt.Println(snake.Move())
-				} else if s[1] == "speak" {
-					fmt.Println(snake.Speak())
-				}
+			switch s[1] {
+			case "eat":
+				fmt.Println(animal.Eat())
+			case "move":
+				fmt.Println(animal.Move())
+			case "speak":
+				fmt.Println(animal.Speak())
 			}
 		}
 	}
