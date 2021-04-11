@@ -14,14 +14,14 @@ Due to the uncertainty of Goroutine scheduling mechanism, the results of the fol
 
 func add_one(num *int) {
 	for z := 0; z < 50; z++ {
-		(*num)++
+		*num = *num + 1
 		fmt.Println("plus", *num)
 	}
 }
 
 func sub_one(num *int) {
 	for z := 0; z < 50; z++ {
-		(*num)--
+		*num = *num - 1
 		fmt.Println("minus", *num)
 	}
 }
