@@ -1,3 +1,7 @@
+/*
+Write two goroutines which have a race condition when executed concurrently. Explain what the race condition is and how it can occur.
+*/
+
 package main
 
 import (
@@ -6,7 +10,7 @@ import (
 )
 
 /*
-Raca condition is when multiple threads are trying to access and manipulat the same variable.
+Race condition is when multiple threads are trying to access and manipulat the same variable.
 In the code below, main, add_one and sub_one are all accessing and changing the value of x.
 Due to the uncertainty of Goroutine scheduling mechanism, the results of the following program is unpredictable.
 */

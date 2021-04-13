@@ -9,26 +9,17 @@ package main
 
 import (
 	"fmt"
-	"sync"
 )
 
-var wg sync.WaitGroup
-var counter = 0
+func prod(v1 int, v2 int, c chan int) {
+	c <- v1 * v2}
 
-func sayHellow() {
-	fmt.Printf("Hello #%v\n", counter)
-	defer wg.Done()
-}
-func increment() {
-	counter++
-	defer wg.Done()
-}
 func main() {
-	for i := 0; i < 10; i++ {
-		wg.Add(2)
-		go sayHellow()
-		go increment()
-	}
-	wg.Wait()
+	c := make(chan int)
+	go prod(1, 2, c)
+	go prod(3, 4, c)
 
+	a := <- c
+	b := <- c
+	fmt.Println(a*b)
 }
