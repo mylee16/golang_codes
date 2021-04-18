@@ -1,25 +1,61 @@
-/*Race condition occurs when more than one thread is accessing the same variable
-and the result depends on the order of the execution of threads i.e. interleaving. As interleaving is non determinstic
-if the program depends on interleaving, the result will be non determinstic.
-In this example both sayHellow() and increment() function are acessing the same variable counter and
-are dependent on the interleaving so the result is non deterministic. If you run the program multiple times
-you will see different results.*/
-
 package main
 
 import (
 	"fmt"
+	"sync"
+	"time"
 )
 
-func prod(v1 int, v2 int, c chan int) {
-	c <- v1 * v2}
+type ChopS struct{ sync.Mutex }
+
+type Philo struct {
+	id              int
+	leftCS, rightCS *ChopS
+	eatTimes        int
+}
+
+var wait sync.Mutex
+
+func (p Philo) eat() {
+	defer wg.Done()
+	for i := 0; i < 3; i++ {
+		wait.Lock()
+		if (p.eatTimes) < 3 {
+			//fmt.Printf("Philosopher %d is grabbing left chopstick...\n", p.id)
+			p.leftCS.Lock()
+			//fmt.Printf("Philosopher %d is grabbing right chopstick...\n", p.id)
+			p.rightCS.Lock()
+			wait.Unlock()
+			p.eatTimes = p.eatTimes + 1
+			fmt.Printf("starting to eat %d %dtimes\n", p.id, p.eatTimes)
+			time.Sleep(1000 * time.Millisecond)
+			fmt.Printf("finishing eating %d\n", p.id)
+
+			p.leftCS.Unlock()
+			p.rightCS.Unlock()
+
+		} else {
+			wait.Unlock()
+		}
+	}
+}
+
+var wg sync.WaitGroup
 
 func main() {
-	c := make(chan int)
-	go prod(1, 2, c)
-	go prod(3, 4, c)
+	CSticks := make([]*ChopS, 5)
+	for i := 0; i < 5; i++ {
+		CSticks[i] = new(ChopS)
+	}
 
-	a := <- c
-	b := <- c
-	fmt.Println(a*b)
+	philos := make([]*Philo, 5)
+	for i := 0; i < 5; i++ {
+		philos[i] = &Philo{i + 1, CSticks[i], CSticks[(i+1)%5], 0}
+	}
+
+	for i := 0; i < 5; i++ {
+		wg.Add(1)
+		go philos[i].eat()
+	}
+	wg.Wait()
 }
